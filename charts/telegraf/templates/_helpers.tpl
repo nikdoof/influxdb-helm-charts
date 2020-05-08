@@ -237,7 +237,19 @@ Create chart name and version as used by the chart label.
               {{- if eq $tps "map[string]interface {}"}}
         [[inputs.{{ $input }}.{{ $key }}.{{ $k }}]]
                 {{- range $foo, $bar := $v }}
+                  {{- $tpx := typeOf $bar -}}
+                  {{- if eq $tpx "string" }}
             {{ $foo }} = {{ $bar | quote }}
+                  {{- end }}
+                  {{- if eq $tpx "float64" }}
+            {{ $foo }} = {{ $bar | int64 }}
+                  {{- end }}
+                  {{- if eq $tpx "int" }}
+            {{ $foo }} = {{ $bar | int64 }}
+                  {{- end }}
+                  {{- if eq $tpx "bool" }}
+            {{ $foo }} = {{ $bar }}
+                  {{- end }}
                 {{- end }}
               {{- end }}
             {{- end }}
